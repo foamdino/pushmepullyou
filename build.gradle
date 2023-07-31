@@ -1,0 +1,58 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.0'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'maven-publish'
+}
+
+sourceCompatibility = '17'
+
+group 'com.thg'
+version = "${version != 'unspecified' ? version : '1.0.0-SNAPSHOT'}"
+
+repositories {
+	mavenCentral()
+	google()
+}
+
+ext {
+	set('springCloudGcpVersion', "4.6.0")
+	set('springCloudVersion', "2022.0.4")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-amqp:3.1.0'
+	implementation 'com.google.cloud:spring-cloud-gcp-starter-pubsub:4.7.0'
+	implementation 'org.springframework.integration:spring-integration-core:6.1.2'
+	implementation 'org.springframework.boot:spring-boot-starter-web:3.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.1.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+publishing {
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = "https://maven.pkg.github.com/foamdino/pushmepullyou"
+			credentials {
+				username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
+	publications {
+		gpr(MavenPublication) {
+			artifact tasks.named("bootJar")
+		}
+	}
+}

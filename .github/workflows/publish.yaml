@@ -1,0 +1,28 @@
+name: Example Publish package to GitHub Packages with Gradle
+on:
+  push:
+    tags:
+      - 'release/*'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Set tag name
+        shell: bash
+        run: echo "CLEAN_TAG_NAME=$(echo ${{ github.ref_name }} | sed -r 's/release\///g')" >> $GITHUB_ENV
+      - name: Publish package
+        shell: bash
+        run: |
+          ./gradlew bootJar publish -Pversion=$CLEAN_TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
