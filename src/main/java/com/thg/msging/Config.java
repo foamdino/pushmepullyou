@@ -3,14 +3,9 @@ package com.thg.msging;
 import com.google.cloud.spring.pubsub.core.PubSubTemplate;
 import com.google.cloud.spring.pubsub.integration.AckMode;
 import com.google.cloud.spring.pubsub.integration.inbound.PubSubInboundChannelAdapter;
-import com.google.cloud.spring.pubsub.support.converter.SimplePubSubMessageConverter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -73,27 +68,6 @@ public class Config {
     public Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
     }
-
-//    @Bean
-//    public ConnectionFactory connectionFactory() {
-//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host);
-//        connectionFactory.setUsername(username);
-//        connectionFactory.setPassword(password);
-//        return connectionFactory;
-//    }
-//
-//    @Bean
-//    public SimpleMessageListenerContainer container() {
-//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//        container.setConnectionFactory(connectionFactory());
-//        container.setQueueNames(qName);
-//        container.setExposeListenerChannel(true);
-//        // set ack to manual to ensure we do actually ack messages
-//        container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-//        container.setMessageListener(new MessageListenerAdapter(new Consumer()));
-//
-//        return container;
-//    }
 
     @Bean
     public MessageChannel myInputChannel() {
