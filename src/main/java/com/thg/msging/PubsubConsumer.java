@@ -35,7 +35,7 @@ public class PubsubConsumer {
         consumeMsgExceptions = meterRegistry.counter("consumeMsg.exceptions");
     }
 
-    @ServiceActivator(inputChannel = "mySubscriptionInputChannel")
+    @ServiceActivator(inputChannel = "myInputChannel")
     public void consume(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
         logger.info(String.format("Message received: %s", payload));
         producer.send(payload);

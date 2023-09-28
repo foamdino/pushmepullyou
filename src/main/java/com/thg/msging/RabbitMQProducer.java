@@ -51,12 +51,10 @@ public class RabbitMQProducer {
     }
 
     public void send(String msg) {
-        if (config.produce) {
-            try {
-                logger.info("Sending message");
-                CorrelationData correlationData = new CorrelationData(String.format("Correlation for msg [%s]", msg));
-                rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
-                produceMsgAttempts.increment();
+        try {
+            CorrelationData correlationData = new CorrelationData(String.format("Correlation for msg [%s]", msg));
+            rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
+            produceMsgAttempts.increment();
 //                CorrelationData.Confirm confirm = correlationData.getFuture().get(100, TimeUnit.MILLISECONDS);
 //                if (confirm != null) {
 //                    if (confirm.isAck()) {
@@ -65,10 +63,9 @@ public class RabbitMQProducer {
 //                        produceMsgNacks.increment();
 //                    }
 //                }
-            } catch (Exception e) {
-                logger.info("Exception sending message: ", e.getMessage());
-                produceMsgExceptions.increment();
-            }
+        } catch (Exception e) {
+            logger.info("Exception sending message: ", e.getMessage());
+            produceMsgExceptions.increment();
         }
     }
 }

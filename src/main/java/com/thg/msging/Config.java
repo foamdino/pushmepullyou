@@ -22,8 +22,6 @@ public class Config {
     public String qName;
     public String exchange;
     public int messages;
-    public boolean produce;
-    public boolean consume;
     private String host;
     private String username;
     private String password;
@@ -31,16 +29,12 @@ public class Config {
     public Config(@Value("${q}") String qName,
                   @Value("${exchange}") String exchange,
                   @Value("${messages}") int messages,
-                  @Value("${produce}") boolean produce,
-                  @Value("${consume}") boolean consume,
                   @Value("${spring.rabbitmq.host}") String host,
                   @Value("${spring.rabbitmq.username}") String username,
                   @Value("${spring.rabbitmq.password}") String password) {
         this.qName = qName;
         this.exchange = exchange;
         this.messages = messages;
-        this.produce = produce;
-        this.consume = consume;
         this.host = host;
         this.username = username;
         this.password = password;
@@ -51,6 +45,8 @@ public class Config {
 //        CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
 //        return meterRegistry;
 //    }
+
+
 
     @Bean
     public Queue queue() {
@@ -77,7 +73,7 @@ public class Config {
     public PubSubInboundChannelAdapter messageChannelAdapter(
             @Qualifier("myInputChannel") MessageChannel inputChannel,
             PubSubTemplate pubSubTemplate) {
-        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "my-subscription");
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-relay");
         adapter.setOutputChannel(inputChannel);
         adapter.setPayloadType(String.class);
         adapter.setAckMode(AckMode.MANUAL);
