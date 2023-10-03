@@ -37,8 +37,8 @@ public class PubsubConsumer {
 
     @ServiceActivator(inputChannel = "myInputChannel")
     public void consume(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        logger.info(String.format("Message received: %s", payload));
+//        logger.info(String.format("Message received: %s", payload));
         producer.send(payload);
-        logger.info(String.format("Message forwarded: %s", payload));
+//        logger.info(String.format("Message forwarded: %s", payload));
     }
 }

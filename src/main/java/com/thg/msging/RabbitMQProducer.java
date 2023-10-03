@@ -35,7 +35,7 @@ public class RabbitMQProducer {
     private void setupCallbacks() {
         this.rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (correlationData != null) {
-                logger.info("Received " + (ack ? " ack " : " nack ") + "for correlation: " + correlationData);
+//                logger.info("Received " + (ack ? " ack " : " nack ") + "for correlation: " + correlationData);
                 if (ack) {
                     producMsgAcks.increment();
                 } else {
@@ -43,11 +43,11 @@ public class RabbitMQProducer {
                 }
             }
         });
-        this.rabbitTemplate.setReturnsCallback(returned -> {
-            logger.info("Returned: " + returned.getMessage() + "\nreplyCode: " + returned.getReplyCode()
-                    + "\nreplyText: " + returned.getReplyText() + "\nexchange/rk: "
-                    + returned.getExchange() + "/" + returned.getRoutingKey());
-        });
+//        this.rabbitTemplate.setReturnsCallback(returned -> {
+//            logger.info("Returned: " + returned.getMessage() + "\nreplyCode: " + returned.getReplyCode()
+//                    + "\nreplyText: " + returned.getReplyText() + "\nexchange/rk: "
+//                    + returned.getExchange() + "/" + returned.getRoutingKey());
+//        });
     }
 
     public void send(String msg) {
