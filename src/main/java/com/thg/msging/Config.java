@@ -69,11 +69,67 @@ public class Config {
     public MessageChannel myInputChannel() {
         return new DirectChannel();
     }
+
     @Bean
-    public PubSubInboundChannelAdapter messageChannelAdapter(
+    public PubSubInboundChannelAdapter hutalyticsRelay(
             @Qualifier("myInputChannel") MessageChannel inputChannel,
             PubSubTemplate pubSubTemplate) {
-        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-relay");
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-hutalytics-relay");
+        adapter.setOutputChannel(inputChannel);
+        adapter.setPayloadType(String.class);
+        adapter.setAckMode(AckMode.MANUAL);
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter ely2FrontEndRelay(
+            @Qualifier("myInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate) {
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-ely2-fe-relay");
+        adapter.setOutputChannel(inputChannel);
+        adapter.setPayloadType(String.class);
+        adapter.setAckMode(AckMode.MANUAL);
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter ely2BackEndRelay(
+            @Qualifier("myInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate) {
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-ely2-be-relay");
+        adapter.setOutputChannel(inputChannel);
+        adapter.setPayloadType(String.class);
+        adapter.setAckMode(AckMode.MANUAL);
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter orderEventsRelay(
+            @Qualifier("myInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate) {
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-order-events-relay");
+        adapter.setOutputChannel(inputChannel);
+        adapter.setPayloadType(String.class);
+        adapter.setAckMode(AckMode.MANUAL);
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter checkoutEventsRelay(
+            @Qualifier("myInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate) {
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-fe-checkout-events-relay");
+        adapter.setOutputChannel(inputChannel);
+        adapter.setPayloadType(String.class);
+        adapter.setAckMode(AckMode.MANUAL);
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter frontEndPerfRelay(
+            @Qualifier("myInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate) {
+        PubSubInboundChannelAdapter adapter = new PubSubInboundChannelAdapter(pubSubTemplate, "msg-bg-data-fe-perf-relay");
         adapter.setOutputChannel(inputChannel);
         adapter.setPayloadType(String.class);
         adapter.setAckMode(AckMode.MANUAL);
