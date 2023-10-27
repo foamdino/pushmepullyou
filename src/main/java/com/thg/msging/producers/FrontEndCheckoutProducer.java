@@ -1,5 +1,6 @@
-package com.thg.msging;
+package com.thg.msging.producers;
 
+import com.thg.msging.Config;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
@@ -7,28 +8,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RabbitMQProducer {
+public class FrontEndCheckoutProducer {
 
-    private final Logger logger = LoggerFactory.getLogger(RabbitMQProducer.class);
+    private final Logger logger = LoggerFactory.getLogger(FrontEndCheckoutProducer.class);
     private final RabbitTemplate rabbitTemplate;
     private final Config config;
-
     private Counter produceMsgAttempts;
     private Counter producMsgAcks;
     private Counter produceMsgNacks;
     private Counter produceMsgExceptions;
 
     @Autowired
-    public RabbitMQProducer(RabbitTemplate rabbitTemplate, Config config, MeterRegistry meterRegistry) {
+    public FrontEndCheckoutProducer(@Qualifier("frontend-checkout-events-template") RabbitTemplate rabbitTemplate, Config config, MeterRegistry meterRegistry) {
         this.rabbitTemplate = rabbitTemplate;
         this.config = config;
-        produceMsgAttempts = meterRegistry.counter("produceMsg.attempts", "exchange", config.exchange, "queue", config.qName);
-        producMsgAcks = meterRegistry.counter("produceMsg.acks", "exchange", config.exchange, "queue", config.qName);
-        produceMsgNacks = meterRegistry.counter("produceMsg.nacks", "exchange", config.exchange, "queue", config.qName);
-        produceMsgExceptions = meterRegistry.counter("produceMsg.exceptions", "exchange", config.exchange, "queue", config.qName);
+        produceMsgAttempts = meterRegistry.counter("produceMsg.attempts", "exchange", config.exchange, "queue", "frontend-checkout-events");
+        producMsgAcks = meterRegistry.counter("produceMsg.acks", "exchange", config.exchange, "queue", "frontend-checkout-events");
+        produceMsgNacks = meterRegistry.counter("produceMsg.nacks", "exchange", config.exchange, "queue", "frontend-checkout-events");
+        produceMsgExceptions = meterRegistry.counter("produceMsg.exceptions", "exchange", config.exchange, "queue", "frontend-checkout-events");
         setupCallbacks();
     }
 
@@ -68,4 +69,5 @@ public class RabbitMQProducer {
             produceMsgExceptions.increment();
         }
     }
+
 }
