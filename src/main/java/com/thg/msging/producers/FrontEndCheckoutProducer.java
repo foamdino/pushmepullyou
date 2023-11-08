@@ -38,13 +38,26 @@ public class FrontEndCheckoutProducer {
     private void setupCallbacks() {
         this.rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (correlationData != null) {
-//                logger.info("Received " + (ack ? " ack " : " nack ") + "for correlation: " + correlationData);
-                if (ack) {
-                    producMsgAcks.increment();
-                } else {
-                    produceMsgNacks.increment();
+                try {
+                    CorrelationData.Confirm confirm = correlationData.getFuture().get(500, TimeUnit.MILLISECONDS);
+                    if (confirm.isAck()) {
+                        producMsgAcks.increment();
+                    } else {
+                        produceMsgNacks.increment();
+                        logger.debug(String.format("Nack returned: %s", cause));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    produceMsgExceptions.increment();
                 }
             }
+
+//            if (ack) {
+//                producMsgAcks.increment();
+//            } else {
+//                produceMsgNacks.increment();
+//
+//            }
         });
 //        this.rabbitTemplate.setReturnsCallback(returned -> {
 //            logger.info("Returned: " + returned.getMessage() + "\nreplyCode: " + returned.getReplyCode()
@@ -59,7 +72,7 @@ public class FrontEndCheckoutProducer {
             rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
             produceMsgAttempts.increment();
         } catch (Exception e) {
-            logger.info("Exception sending message: ", e.getMessage());
+            logger.info(String.format("Exception sending message: %s", e.getMessage()));
             produceMsgExceptions.increment();
         }
     }
