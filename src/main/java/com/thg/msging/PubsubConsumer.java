@@ -54,43 +54,43 @@ public class PubsubConsumer {
 
     @ServiceActivator(inputChannel = "hutalytics-expanded")
     public void consumeHutalytics(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        hutalyticsProducer.send(payload);
         message.ack();
+        hutalyticsProducer.send(payload);
         logger.trace(String.format("Message forwarded for hutalytics-expanded: %s", payload));
     }
 
     @ServiceActivator(inputChannel = "elysium2-frontend-enriched")
     public void consumeEly2FrontEnd(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        elysium2FrontEndProducer.send(payload);
         message.ack();
+        elysium2FrontEndProducer.send(payload);
         logger.trace(String.format("Message forwarded for elysium2-frontend-enriched: %s", payload));
     }
 
     @ServiceActivator(inputChannel = "elysium2-backend-events")
     public void consumeEly2BackEndEvents(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        elysium2BackEndProducer.send(payload);
         message.ack();
+        elysium2BackEndProducer.send(payload);
         logger.trace(String.format("Message forwarded for elysium2-backend-events: %s", payload));
     }
 
     @ServiceActivator(inputChannel = "order-events-expanded")
     public void consumeOrderEvents(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        orderEventsProducer.send(payload);
         message.ack();
+        orderEventsProducer.send(payload);
         logger.trace(String.format("Message forwarded for order-events-expanded: %s", payload));
     }
 
     @ServiceActivator(inputChannel = "frontend-checkout-events")
     public void consumeFrontEndCheckoutEvents(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        frontEndCheckoutProducer.send(payload);
         message.ack();
+        frontEndCheckoutProducer.send(payload);
         logger.trace(String.format("Message forwarded for frontend-checkout-events: %s", payload));
     }
 
     @ServiceActivator(inputChannel = "frontend-elysium-perf-data")
     public void consumeFrontEndElyPerfData(String payload, @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) BasicAcknowledgeablePubsubMessage message) {
-        frontEndElysiumPerfProducer.send(payload);
         message.ack();
+        frontEndElysiumPerfProducer.send(payload);
         logger.trace(String.format("Message forwarded for frontend-elysium-perf-data: %s", payload));
     }
 }

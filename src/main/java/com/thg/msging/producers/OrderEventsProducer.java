@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class OrderEventsProducer {
 
@@ -56,14 +58,14 @@ public class OrderEventsProducer {
             CorrelationData correlationData = new CorrelationData(String.format("Correlation for msg [%s]", msg));
             rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
             produceMsgAttempts.increment();
-//                CorrelationData.Confirm confirm = correlationData.getFuture().get(100, TimeUnit.MILLISECONDS);
-//                if (confirm != null) {
-//                    if (confirm.isAck()) {
-//                        producMsgAcks.increment();
-//                    } else {
-//                        produceMsgNacks.increment();
-//                    }
-//                }
+            CorrelationData.Confirm confirm = correlationData.getFuture().get(20, TimeUnit.SECONDS);
+            if (confirm != null) {
+                if (confirm.isAck()) {
+                    producMsgAcks.increment();
+                } else {
+                    produceMsgNacks.increment();
+                }
+            }
         } catch (Exception e) {
             logger.info("Exception sending message: ", e.getMessage());
             produceMsgExceptions.increment();
