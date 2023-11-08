@@ -58,14 +58,6 @@ public class OrderEventsProducer {
             CorrelationData correlationData = new CorrelationData(String.format("Correlation for msg [%s]", msg));
             rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
             produceMsgAttempts.increment();
-            CorrelationData.Confirm confirm = correlationData.getFuture().get(20, TimeUnit.SECONDS);
-            if (confirm != null) {
-                if (confirm.isAck()) {
-                    producMsgAcks.increment();
-                } else {
-                    produceMsgNacks.increment();
-                }
-            }
         } catch (Exception e) {
             logger.info("Exception sending message: ", e.getMessage());
             produceMsgExceptions.increment();
