@@ -69,7 +69,7 @@ public class FrontEndCheckoutProducer {
     public void send(String msg) {
         try {
             CorrelationData correlationData = new CorrelationData(String.format("Correlation for msg [%s]", msg));
-            rabbitTemplate.convertAndSend(config.exchange, "com.thg.msging", msg, correlationData);
+            rabbitTemplate.convertAndSend(config.exchange, "com.thg.frontend-checkout-events-q", msg, correlationData);
             produceMsgAttempts.increment();
         } catch (Exception e) {
             logger.info(String.format("Exception sending message: %s", e.getMessage()));

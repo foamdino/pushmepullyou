@@ -122,7 +122,7 @@ public class Config {
     }
     @Bean
     public Binding checkoutEventsBinding(@Qualifier("frontend-checkout-events-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.order-events-expanded-q");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.frontend-checkout-events-q");
     }
     @Bean
     public Binding elysiumPerfBinding(@Qualifier("frontend-elysium-perf-data-q") Queue queue, TopicExchange exchange) {
