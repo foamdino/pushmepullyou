@@ -118,7 +118,7 @@ public class Config {
     }
     @Bean
     public Binding orderEventsBinding(@Qualifier("order-events-expanded-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.order-events-expanded-q");
     }
     @Bean
     public Binding checkoutEventsBinding(@Qualifier("frontend-checkout-events-q") Queue queue, TopicExchange exchange) {
