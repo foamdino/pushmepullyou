@@ -106,15 +106,15 @@ public class Config {
 
     @Bean
     public Binding hutalyticsBinding(@Qualifier("hutalytics-expanded-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.hutalytics-expanded-q");
     }
     @Bean
     public Binding ely2FrontendBinding(@Qualifier("elysium2-frontend-enriched-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.elysium2-frontend-enriched-q");
     }
     @Bean
     public Binding ely2BackendBinding(@Qualifier("elysium2-backend-events-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.elysium2-backend-events-q");
     }
     @Bean
     public Binding orderEventsBinding(@Qualifier("order-events-expanded-q") Queue queue, TopicExchange exchange) {
@@ -122,11 +122,11 @@ public class Config {
     }
     @Bean
     public Binding checkoutEventsBinding(@Qualifier("frontend-checkout-events-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.order-events-expanded-q");
     }
     @Bean
     public Binding elysiumPerfBinding(@Qualifier("frontend-elysium-perf-data-q") Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("com.thg.#");
+        return BindingBuilder.bind(queue).to(exchange).with("com.thg.frontend-elysium-perf-data-q");
     }
 
     @Bean
